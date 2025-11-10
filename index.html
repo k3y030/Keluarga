@@ -7,9 +7,9 @@
     <style>
         /* DESIGN BARU: SINEMATIK & EMOSIONAL */
         body {
-            background-color: #000000; /* Hitam Penuh */
+            background-color: #000000;
             color: #FFFFFF;
-            font-family: 'Georgia', 'Times New Roman', serif; /* Font lebih klasik/emosional */
+            font-family: 'Georgia', 'Times New Roman', serif;
             padding: 0;
             margin: 0;
             overflow-y: auto;
@@ -20,54 +20,95 @@
             min-height: 100vh;
         }
         #output {
-            max-width: 900px; 
+            max-width: 900px;
             width: 90%;
             padding: 30px 0;
-            background-color: transparent; 
+            background-color: transparent;
             border: none;
             box-shadow: none;
             text-align: center;
         }
         .text-line {
-            opacity: 0; /* Semua baris bermula tersembunyi */
+            opacity: 0;
             margin: 25px 0;
-            font-size: 1.5em; /* Saiz besar untuk impak */
+            font-size: 1.5em; /* Desktop Default */
             line-height: 1.5;
-            transition: opacity 1.5s ease-in-out; /* Animasi pudar masuk yang dramatik */
+            transition: opacity 1.5s ease-in-out;
         }
         .center-text {
             text-align: center;
         }
 
-        /* Warna untuk kesan dramatik */
-        .color-title { color: #FFD700; font-size: 2.5em; font-weight: bold; } /* Emas */
-        .color-main-msg { color: #E6E6FA; font-size: 1.8em; font-style: italic; } /* Lavender */
-        .color-focus { color: #FA8072; font-weight: bold; } /* Salmon (Fokus) */
-        .color-support { color: #90EE90; font-size: 1.2em; } /* Hijau Lembut */
+        /* Warna untuk kesan dramatik - Saiz DESKTOP */
+        .color-title { color: #FFD700; font-size: 2.5em; font-weight: bold; }
+        .color-main-msg { color: #E6E6FA; font-size: 1.9em; font-style: italic; } /* Saiz h3 di desktop */
+        .color-focus { color: #FA8072; font-weight: bold; }
+        .color-support { color: #90EE90; font-size: 1.2em; }
 
-        /* Gaya Kotak Mesej Akhir (Diringkaskan) */
+        /* Gaya Kotak Mesej Akhir */
         .final-result-box {
-            background-color: #1c1c1c; /* Latar belakang kelabu gelap */
+            background-color: #1c1c1c;
             padding: 30px;
             margin-top: 50px;
             border-radius: 5px;
-            border-left: 5px solid #FFD700; /* Garisan Emas di tepi */
+            border-left: 5px solid #FFD700;
             text-align: center;
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
         }
         .final-result-box h3 {
-            color: #FFFFFF;
-            font-size: 1.9em;
+            /* H3 menggunakan class color-main-msg untuk saiz desktop */
             line-height: 1.4;
             margin-bottom: 30px;
+        }
+        
+        .image-container {
+            opacity: 0;
+            margin: 20px auto;
+            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
+            transform: scale(0.8);
+        }
+        .image-container.show {
+            opacity: 1;
+            transform: scale(1);
         }
         .proof-image {
             max-width: 90%;
             height: auto;
-            border: 5px solid #E6E6FA; /* Border putih/lavender */
-            margin: 20px auto;
+            border: 5px solid #E6E6FA;
             display: block;
+            margin: 0 auto;
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* ========================================================= */
+        /* MEDIA QUERIES: MEMBETULKAN SAIZ TULISAN PADA SKRIN HP */
+        /* ========================================================= */
+        @media (max-width: 600px) {
+            /* Saiz Teks Asas (text-line) */
+            .text-line {
+                font-size: 1.2em;
+                margin: 15px 0;
+            }
+            
+            /* Tajuk Utama (H3 / color-main-msg) */
+            .color-main-msg { 
+                font-size: 1.4em; /* Dikurangkan saiz untuk HP */
+            }
+
+            /* Sub-Tajuk / Judul (color-title) */
+            .color-title { 
+                font-size: 1.8em; /* Dikurangkan saiz untuk HP */
+            }
+
+            /* Ayat Sokongan (color-support) */
+            .color-support { 
+                font-size: 1.0em; 
+            }
+            
+            /* Saiz Gambar Penuh */
+            .proof-image {
+                max-width: 100%; /* Lebih besar sedikit di HP */
+            }
         }
     </style>
 </head>
@@ -77,9 +118,8 @@
 
     <script>
         const outputDiv = document.getElementById('output');
-        const lineDelay = 1500; // Delay yang lebih panjang untuk kesan sinematik
+        const lineDelay = 1500;
         
-        // Fungsi baru untuk pudar masuk (fade in)
         async function writeLine(text, colorClass = "color-white", delay = lineDelay) {
             const lineElement = document.createElement('div');
             lineElement.className = 'text-line ' + colorClass;
@@ -87,7 +127,6 @@
             outputDiv.appendChild(lineElement);
             outputDiv.scrollTop = outputDiv.scrollHeight;
 
-            // Paksa reflow sebelum set opacity (memastikan transisi berlaku)
             void lineElement.offsetWidth;
             lineElement.style.opacity = 1;
             
@@ -95,42 +134,45 @@
         }
 
         const photoPath = '';
-        // DIKEMASKINI: Menggunakan 'Capture1.jpeg' untuk semua 3 paparan
-        const photos = ['Cap1.jpg']; 
+        const photos = ['Cap1.jpg'];
+
+        async function showImageDramatically(photo) {
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'image-container';
+            imgContainer.innerHTML = `<img src="${photoPath}${photo}" alt="Kenangan Keluarga" class="proof-image">`;
+            outputDiv.appendChild(imgContainer);
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+
+            await new Promise(resolve => setTimeout(resolve, 50));
+
+            imgContainer.classList.add('show'); 
+            await new Promise(resolve => setTimeout(resolve, 1500));
+        }
 
         async function runPresentation() {
             outputDiv.innerHTML = ""; 
 
-            // Bahagian 1: Pengenalan Ringkas
             await writeLine("MEMPERSEMBAHKAN...", "color-support", 1000); 
-            await writeLine("Di Sebalik Fitnah", "color-title", 1500);
+            await writeLine("Di Sebalik Fitnah", "color-title", 1500); 
             
-            
-            // === MESEJ UTAMA & GAMBAR ===
             
             // Kotak Mesej Akhir & Paparan Gambar
             outputDiv.innerHTML += `
                 <div class="final-result-box text-line">
                     <h3 class="color-main-msg">
-                        "Walau kami di kata belakang, di fitnah oleh <span class="color-focus">si Batu Api</span>, <br>Kami tetap bersama.<br>Kerana kami sudah biasa mandi sungai bersama sebelum semua ini."
+                       "Walau kami di kata belakang, di fitnah oleh <span class="color-focus">si Batu Api</span>, <br>Kami tetap bersama.<br>Kerana kami sudah biasa mandi sungai bersama sebelum semua ini."
                     </h3>
                     <p class="color-support">Di sini kami bertapak. Sunyi tak memadam, jauh tak melupai.</p>
+                    
             `;
             const finalBox = outputDiv.lastElementChild;
-            void finalBox.offsetWidth; // Paksa reflow
+            void finalBox.offsetWidth; 
             finalBox.style.opacity = 1;
 
             await new Promise(resolve => setTimeout(resolve, 2000));
 
-            // Papar Gambar satu persatu
             for(const photo of photos) {
-                const imgContainer = document.createElement('div');
-                imgContainer.className = 'text-line';
-                imgContainer.innerHTML = `<img src="${photoPath}${photo}" alt="Kenangan Keluarga" class="proof-image">`; 
-                outputDiv.appendChild(imgContainer);
-                void imgContainer.offsetWidth;
-                imgContainer.style.opacity = 1;
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await showImageDramatically(photo);
             }
 
             outputDiv.innerHTML += `
